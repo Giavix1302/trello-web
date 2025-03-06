@@ -95,7 +95,10 @@ function BoardBar() {
               width: 32,
               height: 32,
               fontSize: '1rem',
-              border: 'none'
+              border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+              '&:first-of-type': { bgcolor: '#a4b0be' }
             }
           }}
         >
