@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import Box from '@mui/material/Box'
-import ModeSelect from '~/components/ModeSelect'
+import ModeSelect from '~/components/ModeSelect/ModeSelect'
 import SvgIcon from '@mui/material/SvgIcon'
 import AppsIcon from '@mui/icons-material/Apps'
 import { ReactComponent as trelloIcon } from '~/assets/trello.svg'
@@ -16,11 +16,11 @@ import TextField from '@mui/material/TextField'
 import Badge from '@mui/material/Badge'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import Tooltip from '@mui/material/Tooltip'
 import Profiles from './Menus/Profiles'
-import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search'
+import CloseIcon from '@mui/icons-material/Close'
 
 function AppBar() {
   const [searchValue, setSearchValue] = useState('')
