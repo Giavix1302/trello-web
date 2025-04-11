@@ -9,7 +9,8 @@ import {
   MouseSensor,
   TouchSensor,
   DragOverlay,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from '@dnd-kit/core'
 import { useEffect, useState } from 'react'
 import { cloneDeep } from 'lodash'
@@ -171,6 +172,8 @@ function BoardContent({ board }) {
   return (
     <DndContext
       sensors={sensors}
+      // Thuật toán phát hiện va chạm
+      collisionDetection={closestCorners}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
