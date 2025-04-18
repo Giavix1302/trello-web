@@ -15,8 +15,9 @@ import {
   getFirstCollision
 } from '@dnd-kit/core'
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -73,14 +74,14 @@ function BoardContent({ board }) {
   ) => {
     setOrderedColumn(prevColumn => {
       // tìm vị trí index của cái overCard trong column đích (nơi mà card được kéo tới)
-      const overCardIndex = overColumn?.cards.findIndex(c => c._id === overCardId)
+      const overCardIndex = overColumn?.cards?.findIndex(c => c._id === overCardId)
 
       // Logic tinhs toans "cardIndex" mới (trên hoặc dưới overCard) lấy chuẩn ra từ code của thư viện
       let newCardIndex
       const isBelowOverItem = active.rect.current.translated &&
         active.rect.current.translated.top > over.rect.top + over.rect.height
       const modifier = isBelowOverItem ? 1 : 0
-      newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn.cards.length + 1
+      newCardIndex = overCardIndex >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1
 
       // Clone mảng OrderedColumnState cũ ra một cái mới để xử lí data rồi return - cập nhật lại cho OrderedColumnState
       const nextColumns = cloneDeep(prevColumn)
@@ -90,9 +91,16 @@ function BoardContent({ board }) {
       if (nextActiveColumn) {
         // xóa card ở column active (column cũ) lúc mà kéo card ra khỏi nó để sang column khác
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== activeDraggingCardId)
+
+        // Thêm placeholder card vào column cũ nếu column cũ rỗng
+        if (isEmpty(nextActiveColumn?.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
         // Cập nhật lại columnOrderIds của column active (column cũ) sau khi đã xóa card
-        nextActiveColumn.columnOrderIds = nextActiveColumn.cards.map(card => card._id)
+        nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card._id)
       }
+      // column mowis
       if (nextOverColumn) {
         // kiểm tra xem card đang kéo có tồn tại ở overColumn hay không nếu có thì xóa nó trước
         nextOverColumn.cards = nextOverColumn.cards.filter(card => card._id !== activeDraggingCardId)
@@ -106,8 +114,10 @@ function BoardContent({ board }) {
         // Thêm card vào column đích (column mới) ở vị trí mới (toSpliced() tạo ra mạng mới)
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData)
 
+        nextOverColumn.cards = nextOverColumn.cards.filter(card => !card?.FE_PlaceholderCard) // xóa card placeholder đi nếu có
+
         // Cập nhật lại columnOrderIds của column đích (column mới) sau khi đã thêm card
-        nextOverColumn.columnOrderIds = nextOverColumn.cards.map(card => card._id)
+        nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
       return nextColumns
     })
