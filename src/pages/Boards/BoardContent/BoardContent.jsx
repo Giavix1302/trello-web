@@ -28,6 +28,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 
 function BoardContent({ board }) {
+  console.log(board);
   // Yêu cần chuột di chuyển 15px thì mới kích hoạt event, fix trường hợp click vào column
   // Nếu dùng PointerSensor mặc định thì phải kế hợp với thuộc tính css touchAction: 'none' ở những phần tử kéo thả
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
@@ -43,6 +44,7 @@ function BoardContent({ board }) {
 
   const [orderedColumn, setOrderedColumn] = useState([])
   // console.log('orderedColumn', orderedColumn);
+
 
   // cùng 1 thời điểm chỉ có 1 phần tử được kéo (column hoặc card)
   const [activeDragItemId, setActiveDragItemId] = useState(null)
