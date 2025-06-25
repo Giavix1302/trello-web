@@ -6,10 +6,9 @@ import TextField from '@mui/material/TextField'
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 import InputAdornment from '@mui/material/InputAdornment'
-
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
-
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 function ListColumns({ columns }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
@@ -19,6 +18,7 @@ function ListColumns({ columns }) {
 
   const addNewColumn = () => {
     if (!newColumnTitle.trim()) {
+      toast.error('Please enter column title!')
       return
     }
 

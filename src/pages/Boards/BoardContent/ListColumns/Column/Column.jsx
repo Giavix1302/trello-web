@@ -20,9 +20,10 @@ import ListCards from './ListCards/ListCards'
 import { mapOrder } from '~/utils/sorts'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
-
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { toast } from 'react-toastify'
+
 
 function Column({ column }) {
   //
@@ -62,6 +63,7 @@ function Column({ column }) {
 
   const addNewCard = () => {
     if (!newCardTitle.trim()) {
+      toast.error('Please enter card title!')
       return
     }
 
