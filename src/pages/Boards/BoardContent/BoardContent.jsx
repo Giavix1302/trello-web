@@ -26,7 +26,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // Yêu cần chuột di chuyển 15px thì mới kích hoạt event, fix trường hợp click vào column
   // Nếu dùng PointerSensor mặc định thì phải kế hợp với thuộc tính css touchAction: 'none' ở những phần tử kéo thả
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
@@ -247,11 +247,9 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
 
         // Dùng arrayMove của Dndkit để sắp xếp lại các column ban đầu
         const dndOrderedColumns = arrayMove(orderedColumn, oldColumnIndex, newColumnIndex)
-        // 2 clg dữ liệu này dùng để xử lí gọi api
-        // const dnsColumnOrderIds = dndOrderedColumns.map(c => c._id)
-        // console.log("dndOrderedColumns:" + dndOrderedColumns);
-        // console.log("dnsColumnOrderIds:" + dnsColumnOrderIds);
 
+        moveColumns(dndOrderedColumns)
+        // cap nhat lại state
         setOrderedColumn(dndOrderedColumns)
       }
     }
