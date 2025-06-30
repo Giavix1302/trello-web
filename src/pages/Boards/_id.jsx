@@ -29,7 +29,6 @@ function Board() {
     // call api
     fetchBoardDetailsAPI(boardId)
       .then((board) => {
-
         board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
         board.columns.forEach(column => {
           if (isEmpty(column.cards)) {
@@ -73,8 +72,13 @@ function Board() {
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
     if (columnToUpdate) {
-      columnToUpdate.cards.push(createdCard)
-      columnToUpdate.cardOrderIds.push(createdCard._id)
+      if (columnToUpdate.cards.some(card => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
     }
     setBoard(newBoard)
   }
@@ -114,11 +118,15 @@ function Board() {
     newBoard.columnOrderIds = dnsColumnOrderIds
     setBoard(newBoard)
 
+    let prevCardOrderIds = dndOrderedColumns.find(c => c._id === prevColumnId)?.cardOrderIds
+    // xử lí vấn đề khi kéo card cuối cùng ra khỏi column
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
+
     // call api
     moveCardToDifferentColumnAPI({
       currentCardId,
       prevColumnId,
-      prevCardOrderIds: dndOrderedColumns.find(c => c._id === prevColumnId)?.cardOrderIds,
+      prevCardOrderIds,
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds
     })
@@ -129,14 +137,16 @@ function Board() {
       <Box
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           width: '100vw',
           height: '100vh',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          gap: 2
         }}
       >
         <CircularProgress />
-        <Typography>Loading board...</Typography>
+        <Typography variant='h6'>Loading board...</Typography>
       </Box>
     )
   }
