@@ -7,13 +7,22 @@ import App from '~/App.jsx'
 // cau hinh react-toastify
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+// cau hinh mui dialog
+import { ConfirmProvider } from 'material-ui-confirm'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <CssVarsProvider theme={theme}>
-    <CssBaseline />
-    <App />
-    <ToastContainer position='bottom-right' />
+    <ConfirmProvider
+      defaultOptions={{
+        dialogProps: { maxWidth: 'xs' },
+        confirmationButtonProps: { variant: 'contained', color: 'primary' },
+        allowClose: false
+      }}>
+      <CssBaseline />
+      <App />
+      <ToastContainer position='bottom-right' />
+    </ConfirmProvider>
   </CssVarsProvider>
   // </React.StrictMode>
 )
